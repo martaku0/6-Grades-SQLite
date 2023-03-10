@@ -1,0 +1,66 @@
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Nazwa przedmiotu</th>
+            <th>Oceny - pierwszy semestr</th>
+            <th>Średnia</th>
+            <th>Ocena śródroczna</th>
+            <th>Oceny - drugi semestr</th>
+            <th>Średnia</th>
+            <th>Ocena śródroczna</th>
+            <th>Średnia roczna</th>
+            <th>Ocena roczna</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for subject in subjects %}
+            <tr>
+                <td>{{ subject[1] }}</td>
+                <td>
+                    {% for grade in grades %}
+                        {% if grade[2] == 1 and grade[7] == subject[1] %}
+                            {% if grade[9] == 'answer' %}
+                                <a href="#" data-bs-toggle="tooltip" data-bs-title="{{ grade[10] }}" class="text-decoration-none">
+                                    <span class="badge bg-success">{{ grade[4] }}</span>
+                                </a>
+                            {% elif grade[9] == 'quiz' %}
+                            <a href="#" data-bs-toggle="tooltip" data-bs-title="{{ grade[10] }}" class="text-decoration-none">
+                                <span class="badge bg-danger">{{ grade[4] }}</span>
+                            </a>
+                            {% elif grade[9] == 'test' %}
+                            <a href="#" data-bs-toggle="tooltip" data-bs-title="{{ grade[10] }}" class="text-decoration-none">
+                                <span class="badge bg-warning">{{ grade[4] }}</span>
+                            </a>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td class="text-center"><span class="badge bg-primary">{{ countAverage(subject[1], 1)[0] }}</span> </td>
+                <td class="text-center"><span class="badge bg-primary">{{ countAverage(subject[1], 1)[1] }}</span></td>
+                <td>
+                    {% for grade in grades %}
+                        {% if grade[2] == 2 and grade[7] == subject[1] %}
+                            {% if grade[9] == 'answer' %}
+                                <a href="#" data-bs-toggle="tooltip" data-bs-title="{{ grade[10] }}" class="text-decoration-none">
+                                    <span class="badge bg-success">{{ grade[4] }}</span>
+                                </a>
+                            {% elif grade[9] == 'quiz' %}
+                            <a href="#" data-bs-toggle="tooltip" data-bs-title="{{ grade[10] }}" class="text-decoration-none">
+                                <span class="badge bg-danger">{{ grade[4] }}</span>
+                            </a>
+                            {% elif grade[9] == 'test' %}
+                            <a href="#" data-bs-toggle="tooltip" data-bs-title="{{ grade[10] }}" class="text-decoration-none">
+                                <span class="badge bg-warning">{{ grade[4] }}</span>
+                            </a>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td class="text-center"><span class="badge bg-primary">{{ countAverage(subject[1], 2)[0] }}</span></td>
+                <td class="text-center"><span class="badge bg-primary">{{ countAverage(subject[1], 2)[1] }}</span></td>
+                <td><span class="badge bg-dark">{{ countYearAverage(subject[1]) }}</span></td>
+                <td><span class="badge bg-dark">{{ yearly(subject[1]) }}</span></td>
+            </tr>
+        {%  endfor %}
+    </tbody>
+</table>

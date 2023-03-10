@@ -1,0 +1,92 @@
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %} {{ title }} {% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  {{ moment.include_moment() }}
+  {{ moment.locale('pl') }}
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+  <script src="{{ url_for('.static', filename='time.js') }}"></script>
+    <script>
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+  return new bootstrap.Tooltip(tooltipTriggerEl)
+})
+    </script>
+{% endblock %}
+
+{% block navbar %}
+  {% if userLogin %}
+    {% include "include/loginnavbar.html" %}
+  {% else %}
+    {% include "include/navbar.html" %}
+  {% endif %}
+{% endblock %}
+
+{% block body_attribs %} onload="startTime()" {% endblock %}
+
+{% block content %}
+<div class="mt-2 mx-3">
+  {% if userLogin %}
+    <div class="row my-3">
+        <div class="col-lg-2">
+            <div class="card">
+                <div class="card-header text-secondary h5">
+                    Twoja średnia
+                </div>
+                <div class="card-body">
+                    <h2 class="text-center">{{ countAverage("","")[0] }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-2">
+            <div class="card">
+                <div class="card-header text-secondary h5">
+                    Przedmioty - najwyższa średnia
+                </div>
+                <div class="card-body">
+                    <p class="text-start lead text-success">
+                        {{ najwyzszaSrednia()[0] }} <span class="badge bg-success">{{ najwyzszaSrednia()[1] }}</span><br>
+                        {{ najwyzszaSrednia()[2] }} <span class="badge bg-success">{{ najwyzszaSrednia()[3] }}</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-2">
+            <div class="card">
+                <div class="card-header text-secondary h5">
+                    Przedmioty - zagrożenia
+                </div>
+                <div class="card-body">
+                    <p class="text-start lead text-danger">
+                        | {% for zagro in zagrozenia() %}
+                            {{ zagro }} |
+                        {% endfor %}
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-2">
+            <div class="card">
+                <div class="card-body">
+                    <p class="h5 text-center p-1">{{ moment(date).format('dddd DD MMMM YYYY') }}</p>
+                    <p class="h5 text-center p-1"><span id="timeNow"></span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            {% include "include/gradesTab.html" %}
+        </div>
+    </div>
+  {% else %}
+    <div class="alert alert-warning">
+      Nie jesteś zalogowany! <a href="/logIn" class="alert-link">Przejdź do strony logowania</a>
+    </div>
+  {% endif %}
+</div>
+{% include "include/footer.html" %}
+{% endblock %}
